@@ -40,9 +40,26 @@ namespace MauiSharedApp.Services
             }
         }
 
-        public Task<string?> GetAddressFromCoordinatesAsync(double latitude, double longitude)
+        public async Task<string?> GetAddressFromCoordinatesAsync(double latitude, double longitude)
         {
-            return Task.FromResult<string?>(null);
+            try
+            {
+                var request = new GeolocationRequest(GeolocationAccuracy.Medium, TimeSpan.FromSeconds(10));
+                var placemarks = await Geocoding.Default.GetPlacemarksAsync(latitude, longitude);
+                if (placemarks != null)
+                {
+                    var placemark = placemarks.FirstOrDefault();
+                    if (placemark != null)
+                    {
+                        return $"{placemark.Thoroughfare}, {placemark.Locality}, {placemark.AdminArea}, {placemark.PostalCode}, {placemark.CountryName}";
+                    }
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error getting address from coordinates", ex);
+            }
         }
     }
 }
