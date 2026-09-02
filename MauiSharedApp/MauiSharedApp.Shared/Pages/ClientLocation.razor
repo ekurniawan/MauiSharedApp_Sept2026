@@ -15,6 +15,13 @@
         Lat: @clientLocation?.Latitude &nbsp;
         Lon: @clientLocation?.Longitude
     </div>
+    <div class="mt-2">
+        @foreach (var location in sampleLocations)
+        {
+            <button class="btn btn-secondary me-2 mb-2" 
+            @onclick="() => CalculateDistance(location)">Distance to @location.Name</button>
+        }
+    </div>
 }
 else
 {
@@ -74,5 +81,50 @@ else
             await JS.InvokeVoidAsync("alert", $"Error getting geocode: {ex.Message}");
         }
     }
+
+    private readonly List<SampleLocation> sampleLocations = new()
+    {
+        new SampleLocation { Name = "Tugu Yogyakarta", Latitude = -7.7830, Longitude = 110.3671 },
+        new SampleLocation { Name = "Keraton Yogyakarta", Latitude = -7.8052, Longitude = 110.3641 },
+        new SampleLocation { Name = "Malioboro Street", Latitude = -7.7925, Longitude = 110.3654 },
+        new SampleLocation { Name = "Candi Prambanan", Latitude = -7.7520, Longitude = 110.4915 },
+        new SampleLocation { Name = "Candi Borobudur", Latitude = -7.6079, Longitude = 110.2038 },
+        new SampleLocation { Name = "Pantai Parangtritis", Latitude = -8.0253, Longitude = 110.3316 },
+    };
+
+
+    public class SampleLocation
+    {
+        public string Name { get; set; } = string.Empty;
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+    }
+
+    public async Task CalculateDistance(SampleLocation location)
+    {
+        if (clientLocation == null)
+        {
+            await JS.InvokeVoidAsync("alert", "Client location is not available.");
+            return;
+        }
+        double distance = CalculateDistanceKm(clientLocation.Latitude, clientLocation.Longitude, location.Latitude, location.Longitude);
+        await JS.InvokeVoidAsync("alert", $"Distance to {location.Name}: {distance:F2} km");
+    }
+
+    private static double CalculateDistanceKm(double lat1, double lon1, double lat2, double lon2)
+    {
+        const double earthRadiusKm = 6371.0;
+        var dLat = DegreesToRadians(lat2 - lat1);
+        var dLon = DegreesToRadians(lon2 - lon1);
+
+        var a = Math.Sin(dLat / 2) * Math.Sin(dLat / 2) +
+                Math.Cos(DegreesToRadians(lat1)) * Math.Cos(DegreesToRadians(lat2)) *
+                Math.Sin(dLon / 2) * Math.Sin(dLon / 2);
+        var c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
+
+        return earthRadiusKm * c;
+    }
+
+    private static double DegreesToRadians(double degrees) => degrees * Math.PI / 180;
 
 }
