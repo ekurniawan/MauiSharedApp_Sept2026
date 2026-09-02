@@ -12,7 +12,7 @@ builder.Services.AddRazorComponents()
 // Add device-specific services used by the MauiSharedApp.Shared project
 builder.Services.AddSingleton<IFormFactor, FormFactor>();
 builder.Services.AddSingleton<IConnectivityService, ConnectivityService>();
-builder.Services.AddSingleton<IGeolocationService, GeolocationService>();
+builder.Services.AddScoped<IGeolocationService, GeolocationService>();
 
 var app = builder.Build();
 
