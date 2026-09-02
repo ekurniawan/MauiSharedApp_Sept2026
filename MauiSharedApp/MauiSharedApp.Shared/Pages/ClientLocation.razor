@@ -1,0 +1,46 @@
+﻿@page "/client-location"
+@using MauiSharedApp.Shared.Services
+@using MauiSharedApp.Shared.Models
+@inject IGeolocationService GeolocationService
+
+<PageTitle>Client Location</PageTitle>
+
+<h1>Client Location</h1>
+
+@if (GeolocationService.IsSupportedPlatform())
+{
+    <button class="btn btn-primary" @onclick="GetClientLocation">Get Location</button>
+    <div class="mt-2">
+        Lat: <input type="text" class="form-control mt-2" placeholder="Latitude" value="@clientLocation?.Latitude" readonly /> &nbsp;
+        Lon: <input type="text" class="form-control mt-2" placeholder="Longitude" value="@clientLocation?.Longitude" readonly />
+    </div>
+}
+else
+{
+    <p>Your platform is not supported for geolocation.</p>
+}
+
+@code {
+    private GeoLoc clientLocation = new GeoLoc();
+
+    //get the client location
+    private async Task GetClientLocation()
+    {
+        try
+        {
+            var location = await GeolocationService.GetCurrentLocationAsync();
+            if (location != null)
+            {
+                clientLocation = new GeoLoc
+                {
+                    Latitude = location.Latitude,
+                    Longitude = location.Longitude
+                };
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error getting location: {ex.Message}");
+        }
+    }
+}

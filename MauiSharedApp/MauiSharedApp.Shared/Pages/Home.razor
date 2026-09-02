@@ -1,0 +1,31 @@
+﻿@page "/"
+@using MauiSharedApp.Shared.Services
+@inject IFormFactor FormFactor
+@inject IConnectivityService ConnectivityService
+
+<PageTitle>Home</PageTitle>
+
+<h1>Hello, world!</h1>
+
+@if (ConnectivityService.IsSupportedPlatform())
+{
+    if (ConnectivityService.IsConnected())
+    {
+        <p>You are connected to the internet.</p>
+    }
+    else
+    {
+        <p>You are not connected to the internet.</p>
+    }
+}
+else
+{
+    <p>Your platform is not supported for connectivity checks.</p>
+}
+
+Welcome to your new app running on <em>@factor</em> using <em>@platform</em>.
+
+@code {
+    private string factor => FormFactor.GetFormFactor();
+    private string platform => FormFactor.GetPlatform();
+}

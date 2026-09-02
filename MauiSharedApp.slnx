@@ -1,0 +1,8 @@
+<Solution>
+  <Project Path="MauiSharedApp/MauiSharedApp.Shared/MauiSharedApp.Shared.csproj" />
+  <Project Path="MauiSharedApp/MauiSharedApp.Web.Client/MauiSharedApp.Web.Client.csproj" />
+  <Project Path="MauiSharedApp/MauiSharedApp.Web/MauiSharedApp.Web.csproj" />
+  <Project Path="MauiSharedApp/MauiSharedApp/MauiSharedApp.csproj">
+    <Deploy Solution="Debug|*" />
+  </Project>
+</Solution>
