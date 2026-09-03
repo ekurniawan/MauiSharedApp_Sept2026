@@ -1,7 +1,17 @@
 ﻿using MauiSharedApp.Services;
 using MauiSharedApp.Shared.Services;
 using Microsoft.Extensions.DependencyInjection;
+using Plugin.Firebase.CloudMessaging;
+using Plugin.Firebase.CloudMessaging.EventArgs;
 using Microsoft.Extensions.Logging;
+using Microsoft.Maui.LifecycleEvents;
+
+
+#if IOS
+using Plugin.Firebase.Core.Platforms.iOS;
+#elif ANDROID
+using Plugin.Firebase.Core.Platforms.Android;
+#endif
 
 namespace MauiSharedApp
 {
@@ -16,6 +26,7 @@ namespace MauiSharedApp
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
+                .RegisterFirebaseServices()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -25,6 +36,7 @@ namespace MauiSharedApp
             builder.Services.AddSingleton<IFormFactor, FormFactor>();
             builder.Services.AddSingleton<IConnectivityService, ConnectivityService>();
             builder.Services.AddSingleton<IGeolocationService, GeolocationService>();
+            builder.Services.AddSingleton<IPushNotifService, PushNotifService>();
 
             // HttpClient for calling MauiSharedApp.API
             builder.Services.AddHttpClient<ICustomerApiService, CustomerApiService>(client =>
@@ -40,6 +52,24 @@ namespace MauiSharedApp
 #endif
 
             return builder.Build();
+        }
+
+        private static MauiAppBuilder RegisterFirebaseServices(this MauiAppBuilder builder)
+        {
+            builder.ConfigureLifecycleEvents(events => {
+#if IOS
+        events.AddiOS(iOS => iOS.WillFinishLaunching((_, __) => {
+            CrossFirebase.Initialize();
+            FirebaseCloudMessagingImplementation.Initialize();
+            return false;
+        }));
+#elif ANDROID
+                events.AddAndroid(android => android.OnCreate((activity, _) =>
+                CrossFirebase.Initialize(activity, () => activity)));
+#endif
+            });
+
+            return builder;
         }
     }
 }

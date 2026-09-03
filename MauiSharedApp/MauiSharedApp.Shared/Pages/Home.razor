@@ -2,6 +2,7 @@
 @using MauiSharedApp.Shared.Services
 @inject IFormFactor FormFactor
 @inject IConnectivityService ConnectivityService
+@inject IPushNotifService PushNotifService
 
 <PageTitle>Home</PageTitle>
 
@@ -12,6 +13,8 @@
     if (ConnectivityService.IsConnected())
     {
         <p>You are connected to the internet.</p>
+        <p><button @onclick="GenerateToken">Generate Push Notification Token</button></p>
+        <p>Token: @token</p>
     }
     else
     {
@@ -28,4 +31,11 @@ Welcome to your new app running on <em>@factor</em> using <em>@platform</em>.
 @code {
     private string factor => FormFactor.GetFormFactor();
     private string platform => FormFactor.GetPlatform();
+
+    private string token = string.Empty;
+    //Generate a push notification token
+    private async Task GenerateToken()
+    {
+        token = await PushNotifService.GenerateTokenAsync();
+    }
 }
