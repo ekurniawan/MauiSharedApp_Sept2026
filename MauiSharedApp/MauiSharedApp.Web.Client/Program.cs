@@ -8,6 +8,7 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.Services.AddSingleton<IFormFactor, FormFactor>();
 builder.Services.AddSingleton<IConnectivityService, ConnectivityService>();
 builder.Services.AddSingleton<IGeolocationService, GeolocationService>();
+builder.Services.AddSingleton<IPushNotifService, PushNotifService>();
 
 // HttpClient for calling MauiSharedApp.API
 var apiBaseUrl = builder.Configuration["ApiBaseUrl"] ?? "https://localhost:7293/";

@@ -37,5 +37,6 @@ Welcome to your new app running on <em>@factor</em> using <em>@platform</em>.
     private async Task GenerateToken()
     {
         token = await PushNotifService.GenerateTokenAsync();
+        Console.WriteLine($"Generated token: {token}");
     }
 }

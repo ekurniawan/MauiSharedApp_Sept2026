@@ -13,6 +13,7 @@ builder.Services.AddRazorComponents()
 builder.Services.AddSingleton<IFormFactor, FormFactor>();
 builder.Services.AddSingleton<IConnectivityService, ConnectivityService>();
 builder.Services.AddScoped<IGeolocationService, GeolocationService>();
+builder.Services.AddScoped<IPushNotifService, PushNotifService>();
 
 // HttpClient for calling MauiSharedApp.API
 var apiBaseUrl = builder.Configuration["ApiBaseUrl"] ?? "https://localhost:7293/";
