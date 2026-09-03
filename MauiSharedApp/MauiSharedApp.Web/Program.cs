@@ -14,6 +14,13 @@ builder.Services.AddSingleton<IFormFactor, FormFactor>();
 builder.Services.AddSingleton<IConnectivityService, ConnectivityService>();
 builder.Services.AddScoped<IGeolocationService, GeolocationService>();
 
+// HttpClient for calling MauiSharedApp.API
+var apiBaseUrl = builder.Configuration["ApiBaseUrl"] ?? "https://localhost:7293/";
+builder.Services.AddHttpClient<ICustomerApiService, CustomerApiService>(client =>
+{
+    client.BaseAddress = new Uri(apiBaseUrl);
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
