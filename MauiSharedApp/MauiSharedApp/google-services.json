@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "840703965967",
+    "project_id": "chemnotif-af075",
+    "storage_bucket": "chemnotif-af075.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:840703965967:android:3eee0a697459b15b0f1c7a",
+        "android_client_info": {
+          "package_name": "com.actual.salesapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAKdNnM4uyejzSJJWAjjJMLufahgWzdoeE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
